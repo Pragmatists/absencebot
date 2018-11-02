@@ -11,7 +11,7 @@ const helpCommand = (res, intent) => {
 const helpMessage = () => {
   return `*Absence bot help:*\n
   *Want to check who's out today?* \`/absence status\`\n
-  *Want to check out who's out on given day?* \`/absence status ${time.dateFormat}\`\n
+  *Want to check out who's out on given day?* \`/absence status ${time.dateFormat}\` or \`/absence status @tomorrow\`\n
   *Want to check your planned absences?* \`/absence my-absences\`\n
   *Registering absence:*
   *Supported tags:* #vacation #sick
