@@ -19,5 +19,3 @@ postAbsencesMessage = () => {
 schedule.scheduleJob(rule, () => {
   postAbsencesMessage();
 });
-
-postAbsencesMessage();
