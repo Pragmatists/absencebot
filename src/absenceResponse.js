@@ -12,8 +12,7 @@ const absenceResponse = (callback, date = moment().format(dateFormat)) => {
         return acc + `- *${entry.user}* #${entry.tag} _${entry.note}_\n`
       }, '');
 
-      callback(`
-      *Absent on ${date}:*\n${entriesText}`);
+      callback(`*Absent on ${date}:*\n${entriesText}`);
     })
   });
 };
