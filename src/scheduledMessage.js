@@ -9,7 +9,7 @@ rule.minute = 0;
 
 postAbsencesMessage = () => {
   absenceResponse((text) => {
-    axios.post('https://hooks.slack.com/services/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', {
+    axios.post(process.env.SLACK_HOOK, {
       text: text,
       mrkdwn: true
     })
