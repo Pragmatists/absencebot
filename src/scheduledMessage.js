@@ -3,7 +3,7 @@ const axios = require('axios');
 const absenceResponse = require('./absenceResponse');
 
 const rule = new schedule.RecurrenceRule();
-rule.dayOfWeek = [new schedule.Range(1, 4)];
+rule.dayOfWeek = [1, 2, 3, 4, 5];
 rule.hour = 9;
 rule.minute = 0;
 
@@ -19,3 +19,5 @@ postAbsencesMessage = () => {
 schedule.scheduleJob(rule, () => {
   postAbsencesMessage();
 });
+
+postAbsencesMessage();

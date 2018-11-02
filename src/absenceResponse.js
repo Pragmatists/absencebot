@@ -10,8 +10,6 @@ const absenceResponse = (callback) => {
     const db = client.db('absencebot');
     db.collection('absences').find({ date: today }).toArray((err, result) => {
 
-      console.log('result ', result);
-
       const entriesText = result.reduce((acc, entry) => {
         return acc + `- *${entry.user}* #${entry.tag} _${entry.note}_\n`
       }, '');
