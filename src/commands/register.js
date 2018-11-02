@@ -8,6 +8,7 @@ const registerCommand = (req, res, intent) => {
   const date = parseDateIntent(dateIntent);
   const note = parseIntentForSign('"', intent, '"');
 
+
   if(!date) {
     respondWithText(res, 'I did not understand the date format. Check `/absence` for help');
   }

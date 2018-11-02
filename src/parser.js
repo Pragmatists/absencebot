@@ -2,9 +2,15 @@ const moment = require('moment');
 const time = require('./time');
 
 const parseIntentForSign = (sign, intent, breaker = ' ') => {
-  const indexOfSign = intent.indexOf(sign) + 1;
-  const indexOfNextSpace = intent.indexOf(breaker, indexOfSign);
-  return intent.substring(indexOfSign, indexOfNextSpace > 0 ? indexOfNextSpace : undefined)
+  const indexOfSign = intent.indexOf(sign);
+  const start = indexOfSign + 1;
+
+  if (indexOfSign < 0) {
+    return '';
+  }
+
+  const indexOfNextSpace = intent.indexOf(breaker, start);
+  return intent.substring(start, indexOfNextSpace > 0 ? indexOfNextSpace : undefined)
 };
 
 const parseDateIntent = (dateIntent) => {
