@@ -14,7 +14,7 @@ const helpMessage = () => {
   *Want to check out who's out on given day?* \`/absence status ${time.dateFormat}\` or \`/absence status @tomorrow\`\n
   *Want to check your planned absences?* \`/absence my-absences\`\n
   *Registering absence:*
-  *Supported tags:* #vacation #sick
+  *Supported tags:* use tags from OpenTrapp like #vacation #sick or #remote
   *Supported date formats:* @today @tomorrow ${time.dateFormat}
   *You can attach a note wrapping it in double quotes.*
   *Example1*: \`/absence #vacation @tomorrow\`
