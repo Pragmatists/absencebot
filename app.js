@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const absenceWebhook = require('./src/slashController');
+require('dotenv').config();
 require('./src/scheduledMessage');
 const app = express();
 const port = process.env.PORT || 8081;

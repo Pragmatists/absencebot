@@ -2,79 +2,83 @@ const MongoClient = require('mongodb').MongoClient;
 const absenceResponse = require('./absenceResponse');
 const moment = require('moment');
 
-const absenceController = (req, res) => {
+const dateFormat = 'YYYY/MM/DD';
 
-  let responseText;
+const absenceController = (req, res) => {
 
   const intent = req.body.text;
 
   if (!intent.length) {
-    responseText = helpMessage();
+    respondWithText(res, helpMessage());
   } else if (intent === 'status') {
-    responseText = absenceResponse()
+    absenceResponse((text) => respondWithText(res, text));
   }
   else {
     const tagIntent = parseIntentForSign('#', intent);
     const dateIntent = parseIntentForSign('@', intent);
     const date = parseDateIntent(dateIntent);
+    const note = parseIntentForSign('"', intent, '"');
 
-    if(!date || !tagIntent) {
-      responseText = 'Sorry I did not get that. Check `/absence` for help';
+    if (!date || !tagIntent) {
+      respondWithText(res, 'Sorry I did not get that. Check `/absence` for help');
     }
     else {
-
-
-      if(tagIntent === 'sick') {
-        responseText = 'I got it. Feel better soon!';
-      }
-      else {
-        responseText = 'Alright, noted.';
-      }
+      MongoClient.connect(process.env.DB_URI, (err, client) => {
+        const db = client.db('absencebot');
+        db.collection('absences').save({
+          user: req.body.user_name,
+          date: date,
+          tag: tagIntent,
+          note: note
+        }, (err, result) => {
+          if (tagIntent === 'sick') {
+            respondWithText(res, 'I got it. Feel better soon!')
+          }
+          else {
+            respondWithText(res, 'Alright, noted.');
+          }
+        })
+      });
     }
   }
-
-  res.status(200).json({
-    text: responseText,
-    response_type: 'ephemeral',
-    mrkdwn: true
-  });
 };
 
 const helpMessage = () => {
   return `*Absence bot help:*\n
   *Want to check who's out today?* \`/absence status\`\n
-  *Supported tags:* #vacation #sick\n
-  *Supported date formats:* @today @tomorrow\n
-  *Example1*: \`/absence #vacations @tomorow\`\n
-  *Example2*: \`/absence #sick @today\``;
+  *Registering absence:*
+  *Supported tags:* #vacation #sick
+  *Supported date formats:* @today @tomorrow @YYYY/MM/DD
+  *You can attach a note wrapping it in double quotes.*
+  *Example1*: \`/absence #vacation @tomorrow\`
+  *Example2*: \`/absence #sick @today\`
+  *Example3*: \`/absence #vacation @2018/11/02 "I'll be there after lunch."\``;
 };
 
-const parseIntentForSign = (sign, intent) => {
+const parseIntentForSign = (sign, intent, breaker = ' ') => {
   const indexOfSign = intent.indexOf(sign) + 1;
-  const indexOfNextSpace = intent.indexOf(' ', indexOfSign);
+  const indexOfNextSpace = intent.indexOf(breaker, indexOfSign);
   return intent.substring(indexOfSign, indexOfNextSpace > 0 ? indexOfNextSpace : undefined)
 };
 
 const parseDateIntent = (dateIntent) => {
   if (dateIntent === 'today') {
-    return moment()
+    return moment().format(dateFormat)
   }
-  else if (dateIntent === 'tomorow') {
-    return moment().add(1, 'days');
+  else if (dateIntent === 'tomorrow') {
+    return moment().add(1, 'days').format(dateFormat);
+  }
+  else if (dateIntent.contains('/')) {
+    return moment(dateIntent, dateFormat).format(dateFormat);
   }
 };
 
-
-// MongoClient.connect('mongodb://localhost:27017/animals', function (err, client) {
-//   if (err) throw err
-//
-//   var db = client.db('animals')
-//
-//   db.collection('mammals').find().toArray(function (err, result) {
-//     if (err) throw err
-//
-//     console.log(result)
-//   })
-// })
+const respondWithText = (res, text) => {
+  res.status(200).json({
+    text: text,
+    response_type: 'ephemeral',
+    mrkdwn: true
+  });
+};
 
 module.exports = absenceController;

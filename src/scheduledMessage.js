@@ -8,10 +8,12 @@ rule.hour = 9;
 rule.minute = 0;
 
 postAbsencesMessage = () => {
-  axios.post('https://hooks.slack.com/services/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', {
-    text: absenceResponse(),
-    mrkdwn: true
-  })
+  absenceResponse((text) => {
+    axios.post('https://hooks.slack.com/services/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', {
+      text: text,
+      mrkdwn: true
+    })
+  });
 };
 
 schedule.scheduleJob(rule, () => {
