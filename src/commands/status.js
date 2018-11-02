@@ -11,7 +11,6 @@ const statusCommand = (res, intent) => {
       respondWithText("Sorry I did not understand the date format");
     }
     else {
-      console.log('with date ', date);
       absenceResponse((text) => respondWithText(res, text), date);
     }
   }

@@ -1,8 +1,7 @@
 const helpCommand = require('./commands/help');
 const statusCommand = require('./commands/status');
 const registerCommand = require('./commands/register');
-const parseIntentForSign = require('./parser').parseIntentForSign;
-const parseDateIntent = require('./parser').parseDateIntent;
+const unknownCommand = require('./commands/unknown');
 
 const absenceController = (req, res) => {
 
@@ -16,6 +15,9 @@ const absenceController = (req, res) => {
   }
   else if (intent.includes('#')) {
     registerCommand(req, res, intent);
+  }
+  else {
+    unknownCommand(res, intent);
   }
 };
 
