@@ -1,6 +1,8 @@
 const parseIntentForSign = require('../parser').parseIntentForSign;
 const parseDateIntent = require('../parser').parseDateIntent;
 const MongoClient = require('mongodb').MongoClient;
+const uuid = require('uuid');
+const _ = require('lodash');
 
 const registerCommand = (req, res, intent) => {
   const tagIntent = parseIntentForSign('#', intent);
@@ -16,9 +18,13 @@ const registerCommand = (req, res, intent) => {
     respondWithText(res, 'I did not understand the tag. Check `/absence` for help');
   }
   else {
+    console.log('body', req.body)
     MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
       const db = client.db(process.env.DB_NAME);
       db.collection('absences').save({
+        _id: {
+          _id: `WL.${uuid.v4().replace(new RegExp('-', 'g'), '')}`
+        },
         user: req.body.user_name,
         date: date,
         tag: tagIntent,

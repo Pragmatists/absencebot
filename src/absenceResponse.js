@@ -1,11 +1,11 @@
 const MongoClient = require('mongodb').MongoClient;
 const moment = require('moment');
+const time = require('./time');
 
-const dateFormat = 'YYYY/MM/DD';
 
-const absenceResponse = (callback, date = moment().format(dateFormat)) => {
-  MongoClient.connect(process.env.DB_URI, (err, client) => {
-    const db = client.db('absencebot');
+const absenceResponse = (callback, date = moment().format(time.dateFormat)) => {
+  MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
+    const db = client.db(process.env.DB_NAME);
     db.collection('absences').find({ date: date }).toArray((err, result) => {
 
       const entriesText = result.reduce((acc, entry) => {
