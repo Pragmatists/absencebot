@@ -14,7 +14,8 @@ describe('registering absences', () => {
   it('should register absence', (done) => {
     axios.post('http://localhost:8081/absence', {
       text: '#vacation @2018/11/09',
-      user_name: 'bot'
+      user_id: 'U41VCH96D',
+      user_name: 'kubaue'
     })
       .then(res => {
         MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
@@ -22,7 +23,7 @@ describe('registering absences', () => {
           db.collection('absences').findOne((err, result) => {
 
             expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
-            expect(result.employeeID._id).toEqual('bot');
+            expect(result.employeeID._id).toEqual('jakub.zmuda');
             done();
           })
         });
