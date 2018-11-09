@@ -16,8 +16,8 @@ const registerCommand = (req, res, intent) => {
     respondWithText(res, 'I did not understand the tag. Check `/absence` for help');
   }
   else {
-    MongoClient.connect(process.env.DB_URI, (err, client) => {
-      const db = client.db('absencebot');
+    MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
+      const db = client.db(process.env.DB_NAME);
       db.collection('absences').save({
         user: req.body.user_name,
         date: date,
