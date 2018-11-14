@@ -11,55 +11,66 @@ const registerCommand = (req, res, intent) => {
   const date = parseDateIntent(dateIntent);
   const note = parseIntentForSign('"', intent, '"');
 
-  if(!date) {
+  if (!date) {
     respondWithText(res, 'I did not understand the date format. Check `/absence` for help');
   }
   else if (!tagIntent) {
     respondWithText(res, 'Tag required. Check `/absence` for help');
   }
-  if(intent.split("#").length-1 > 1) {
+  if (intent.split('#').length - 1 > 1) {
     respondWithText(res, 'Multi tags are not supported. Check /absence for help.');
   }
-  else if(!tag[tagIntent]) {
+  else if (!tag[tagIntent]) {
     respondWithText(res, 'Tag is not supported. Check /absence for help.');
   }
   else {
     MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, async (err, client) => {
-      const userInfo = await axios.get('https://slack.com/api/users.info', {params: {user: req.body.user_id},headers: {Authorization: 'Bearer xoxp-2181358781-137998587217-475918326482-4962f0a65c73d0638d609895ad6630a2'}});
-      const db = client.db(process.env.DB_NAME);
-      const email = userInfo.data.user.profile.email;
-      const userName = email.substring(0, email.indexOf('@'));
-      db.collection('absences').save({
-        _id: {
-          _id: `WL.${uuid.v4().replace(new RegExp('-', 'g'), '')}`
-        },
-        employeeID: {
-          _id: userName
-        },
-        day: {
-          date: date
-        },
-        workload: {
-          minutes: tag[tagIntent].workload
-        },
-        projectNames: [
-          {name: tagIntent}
-        ],
-        note: {
-          text: note
-        }
-      }, (err, result) => {
-        if(err) {
-          console.log(err);
-          respondWithText(res, 'Unexpected error occurred!')
-        }
-        if (tagIntent === 'sick') {
-          respondWithText(res, 'I got it. Feel better soon!')
-        }
-        else {
-          respondWithText(res, 'Alright, noted.');
-        }
+      axios.get('https://slack.com/api/users.info', {
+        params: { user: req.body.user_id },
+        headers: { Authorization: 'Bearer xoxp-2181358781-137998587217-471084815398-ba93677a6958c2f012b7dd6ab9124bf2' }
       })
+        .then(response => {
+          if(response.data.ok === false) {
+            respondWithText(res, 'There was an error trying to access Slack API! Please contact the maintainer.');
+            console.log('Slack API call failed');
+            return;
+          }
+          const db = client.db(process.env.DB_NAME);
+          const email = response.data.user.profile.email;
+          const userName = email.substring(0, email.indexOf('@'));
+          db.collection('absences').save({
+            _id: {
+              _id: `WL.${uuid.v4().replace(new RegExp('-', 'g'), '')}`
+            },
+            employeeID: {
+              _id: userName
+            },
+            day: {
+              date: date
+            },
+            workload: {
+              minutes: tag[tagIntent].workload
+            },
+            projectNames: [
+              { name: tagIntent }
+            ],
+            note: {
+              text: note
+            }
+          }, (err, result) => {
+            if (err) {
+              console.log(err);
+              respondWithText(res, 'Unexpected error occurred!')
+            }
+            if (tagIntent === 'sick') {
+              respondWithText(res, 'I got it. Feel better soon!')
+            }
+            else {
+              respondWithText(res, 'Alright, noted.');
+            }
+          })
+        })
+        .catch(err => {console.log('Error occured during registration ', err)});
     });
   }
 
