@@ -80,6 +80,29 @@ describe('registering absences', () => {
       })
   });
 
+  it('should register holiday', (done) => {
+    axios.post('http://localhost:8081/absence', {
+      text: '#holiday @2018/11/09 "I am sick today!"',
+      user_id: 'U41VCH96D',
+      user_name: 'kubaue'
+    })
+      .then(res => {
+        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
+          const db = client.db(process.env.DB_NAME);
+          db.collection('absences').findOne((err, result) => {
+
+            expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
+            expect(result.employeeID._id).toEqual('jakub.zmuda');
+            expect(result.day.date).toEqual('2018/11/09');
+            expect(result.projectNames).toEqual([{name: 'holiday'}]);
+            expect(result.workload.minutes).toEqual(480);
+            expect(result.note.text).toEqual('I am sick today!');
+            done();
+          })
+        });
+      })
+  });
+
   it('should not register unknown tag', (done) => {
     axios.post('http://localhost:8081/absence', {
       text: '#unknown @2018/11/09',

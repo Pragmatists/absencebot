@@ -86,6 +86,9 @@ const tag = {
   vacation: {
     workload: 480
   },
+  holiday: {
+    workload: 480
+  },
 };
 
 const respondWithText = (res, text) => {
