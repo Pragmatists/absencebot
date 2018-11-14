@@ -28,6 +28,7 @@ describe('registering absences', () => {
             expect(result.projectNames).toEqual([{name: 'vacation'}]);
             expect(result.workload.minutes).toEqual(480);
             expect(result.note.text).toEqual('I am on vacation!');
+            expect(result.submittedBy).toEqual('absencebot');
             done();
           })
         });
@@ -51,6 +52,7 @@ describe('registering absences', () => {
             expect(result.projectNames).toEqual([{name: 'sick'}]);
             expect(result.workload.minutes).toEqual(480);
             expect(result.note.text).toEqual('I am sick today!');
+            expect(result.submittedBy).toEqual('absencebot')
             done();
           })
         });
@@ -74,6 +76,7 @@ describe('registering absences', () => {
             expect(result.projectNames).toEqual([{name: 'remote'}]);
             expect(result.workload.minutes).toEqual(0);
             expect(result.note.text).toEqual('I am working from home today!');
+            expect(result.submittedBy).toEqual('absencebot')
             done();
           })
         });
@@ -97,6 +100,7 @@ describe('registering absences', () => {
             expect(result.projectNames).toEqual([{name: 'holiday'}]);
             expect(result.workload.minutes).toEqual(480);
             expect(result.note.text).toEqual('I am sick today!');
+            expect(result.submittedBy).toEqual('absencebot');
             done();
           })
         });

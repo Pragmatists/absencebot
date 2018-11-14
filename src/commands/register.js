@@ -56,7 +56,8 @@ const registerCommand = (req, res, intent) => {
             ],
             note: {
               text: note
-            }
+            },
+            submittedBy: 'absencebot'
           }, (err, result) => {
             if (err) {
               console.log(err);
