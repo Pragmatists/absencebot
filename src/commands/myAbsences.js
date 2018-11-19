@@ -2,13 +2,13 @@ const moment = require('moment');
 const time = require('../time');
 const AbsenceRepository = require('../absenceRepository');
 
-const statusCommand = (req, res, intent) => {
+const myAbsences = (req, res, intent) => {
 
   AbsenceRepository.loadByUser(req.body.user_name, (err, result) => {
     const entriesText = result
       .filter(entry => moment(entry.date, time.dateFormat).diff(moment().format(time.dateFormat), 'days') >= 0)
       .reduce((acc, entry) => {
-        return acc + `- *${entry.date}* #${entry.tag} ${note(entry.note)}\n`
+        return acc + `- *${entry.employeeID._id}* #${_.join(entry.projectNames.map(tag => tag.name))} ${note(entry.note.text)}\n`
       }, '');
     respondWithText(res, `*Your absences:*\n${entriesText}`);
   });
@@ -26,4 +26,4 @@ const respondWithText = (res, text) => {
   });
 };
 
-module.exports = statusCommand;
+module.exports = myAbsences;

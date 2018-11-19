@@ -10,6 +10,7 @@ const helpCommand = (res, intent) => {
 
 const helpMessage = () => {
   return `*Absence bot help:*\n
+  *Absence bot is integrated with Open Trapp. Registering absence here will fill the Open Trapp and vice versa.*
   *Want to check who's out today?* \`/absence status\`\n
   *Want to check out who's out on given day?* \`/absence status ${time.dateFormat}\` or \`/absence status @tomorrow\`\n
   *Want to check your planned absences?* \`/absence my-absences\`\n
