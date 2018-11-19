@@ -9,7 +9,7 @@ describe('registering absences', () => {
   beforeEach(async () => {
     const client = await MongoClient.connect(process.env.DB_URI + process.env.DB_NAME);
     db = client.db(process.env.DB_NAME);
-    db.collection('absences').remove({})
+    await db.collection('absences').remove({});
   });
 
   it('should register vacation', (done) => {

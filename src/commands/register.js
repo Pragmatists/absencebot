@@ -27,12 +27,12 @@ const registerCommand = (req, res, intent) => {
     MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, async (err, client) => {
       axios.get('https://slack.com/api/users.info', {
         params: { user: req.body.user_id },
-        headers: { Authorization: 'Bearer xoxp-2181358781-137998587217-471084815398-ba93677a6958c2f012b7dd6ab9124bf2' }
+        headers: { Authorization: process.env.AUTH_TOKEN }
       })
         .then(response => {
           if(response.data.ok === false) {
             respondWithText(res, 'There was an error trying to access Slack API! Please contact the maintainer.');
-            console.log('Slack API call failed');
+            console.log('Slack API call failed', response.data);
             return;
           }
           const db = client.db(process.env.DB_NAME);
