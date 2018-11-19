@@ -4,11 +4,12 @@ const axios = require('axios');
 
 describe('registering absences', () => {
 
-  beforeEach(() => {
-    MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-      const db = client.db(process.env.DB_NAME);
-      db.collection('absences').remove({})
-    })
+  let db;
+
+  beforeEach(async () => {
+    const client = await MongoClient.connect(process.env.DB_URI + process.env.DB_NAME);
+    db = client.db(process.env.DB_NAME);
+    db.collection('absences').remove({})
   });
 
   it('should register vacation', (done) => {
@@ -18,19 +19,16 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-          const db = client.db(process.env.DB_NAME);
-          db.collection('absences').findOne((err, result) => {
+        db.collection('absences').findOne((err, result) => {
 
-            expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
-            expect(result.employeeID._id).toEqual('jakub.zmuda');
-            expect(result.day.date).toEqual('2018/11/09');
-            expect(result.projectNames).toEqual([{name: 'vacation'}]);
-            expect(result.workload.minutes).toEqual(480);
-            expect(result.note.text).toEqual('I am on vacation!');
-            expect(result.submittedBy).toEqual('absencebot');
-            done();
-          })
+          expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
+          expect(result.employeeID._id).toEqual('jakub.zmuda');
+          expect(result.day.date).toEqual('2018/11/09');
+          expect(result.projectNames).toEqual([{name: 'vacation'}]);
+          expect(result.workload.minutes).toEqual(480);
+          expect(result.note.text).toEqual('I am on vacation!');
+          expect(result.submittedBy).toEqual('absencebot');
+          done();
         });
       })
   });
@@ -42,20 +40,17 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-          const db = client.db(process.env.DB_NAME);
-          db.collection('absences').findOne((err, result) => {
+        db.collection('absences').findOne((err, result) => {
 
-            expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
-            expect(result.employeeID._id).toEqual('jakub.zmuda');
-            expect(result.day.date).toEqual('2018/11/09');
-            expect(result.projectNames).toEqual([{name: 'sick'}]);
-            expect(result.workload.minutes).toEqual(480);
-            expect(result.note.text).toEqual('I am sick today!');
-            expect(result.submittedBy).toEqual('absencebot')
-            done();
-          })
-        });
+          expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
+          expect(result.employeeID._id).toEqual('jakub.zmuda');
+          expect(result.day.date).toEqual('2018/11/09');
+          expect(result.projectNames).toEqual([{name: 'sick'}]);
+          expect(result.workload.minutes).toEqual(480);
+          expect(result.note.text).toEqual('I am sick today!');
+          expect(result.submittedBy).toEqual('absencebot')
+          done();
+        })
       })
   });
 
@@ -66,20 +61,17 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-          const db = client.db(process.env.DB_NAME);
-          db.collection('absences').findOne((err, result) => {
+        db.collection('absences').findOne((err, result) => {
 
-            expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
-            expect(result.employeeID._id).toEqual('jakub.zmuda');
-            expect(result.day.date).toEqual('2018/11/09');
-            expect(result.projectNames).toEqual([{name: 'remote'}]);
-            expect(result.workload.minutes).toEqual(0);
-            expect(result.note.text).toEqual('I am working from home today!');
-            expect(result.submittedBy).toEqual('absencebot')
-            done();
-          })
-        });
+          expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
+          expect(result.employeeID._id).toEqual('jakub.zmuda');
+          expect(result.day.date).toEqual('2018/11/09');
+          expect(result.projectNames).toEqual([{name: 'remote'}]);
+          expect(result.workload.minutes).toEqual(0);
+          expect(result.note.text).toEqual('I am working from home today!');
+          expect(result.submittedBy).toEqual('absencebot')
+          done();
+        })
       })
   });
 
@@ -90,20 +82,17 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-          const db = client.db(process.env.DB_NAME);
-          db.collection('absences').findOne((err, result) => {
+        db.collection('absences').findOne((err, result) => {
 
-            expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
-            expect(result.employeeID._id).toEqual('jakub.zmuda');
-            expect(result.day.date).toEqual('2018/11/09');
-            expect(result.projectNames).toEqual([{name: 'holiday'}]);
-            expect(result.workload.minutes).toEqual(480);
-            expect(result.note.text).toEqual('I am sick today!');
-            expect(result.submittedBy).toEqual('absencebot');
-            done();
-          })
-        });
+          expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
+          expect(result.employeeID._id).toEqual('jakub.zmuda');
+          expect(result.day.date).toEqual('2018/11/09');
+          expect(result.projectNames).toEqual([{name: 'holiday'}]);
+          expect(result.workload.minutes).toEqual(480);
+          expect(result.note.text).toEqual('I am sick today!');
+          expect(result.submittedBy).toEqual('absencebot');
+          done();
+        })
       })
   });
 
@@ -114,14 +103,11 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-          const db = client.db(process.env.DB_NAME);
-          db.collection('absences').findOne((err, result) => {
-            expect(result).toBeNull();
-            expect(res.data.text).toEqual('Tag is not supported. Check /absence for help.');
-            done();
-          })
-        });
+        db.collection('absences').findOne((err, result) => {
+          expect(result).toBeNull();
+          expect(res.data.text).toEqual('Tag is not supported. Check /absence for help.');
+          done();
+        })
       })
   });
 
@@ -132,14 +118,11 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, (err, client) => {
-          const db = client.db(process.env.DB_NAME);
-          db.collection('absences').findOne((err, result) => {
-            expect(result).toBeNull();
-            expect(res.data.text).toEqual('Multi tags are not supported. Check /absence for help.');
-            done();
-          })
-        });
+        db.collection('absences').findOne((err, result) => {
+          expect(result).toBeNull();
+          expect(res.data.text).toEqual('Multi tags are not supported. Check /absence for help.');
+          done();
+        })
       })
   });
 
