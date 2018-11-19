@@ -77,7 +77,7 @@ describe('registering absences', () => {
 
   it('should register holiday', (done) => {
     axios.post('http://localhost:8081/absence', {
-      text: '#holiday @2018/11/09 "I am sick today!"',
+      text: '#holiday @2018/11/09 "It is a holiday!"',
       user_id: 'U41VCH96D',
       user_name: 'kubaue'
     })
@@ -89,7 +89,7 @@ describe('registering absences', () => {
           expect(result.day.date).toEqual('2018/11/09');
           expect(result.projectNames).toEqual([{name: 'holiday'}]);
           expect(result.workload.minutes).toEqual(480);
-          expect(result.note.text).toEqual('I am sick today!');
+          expect(result.note.text).toEqual('It is a holiday!');
           expect(result.submittedBy).toEqual('absencebot');
           done();
         })

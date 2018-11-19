@@ -11,6 +11,10 @@ describe('absence response', () => {
     await db.collection('absences').remove({});
   });
 
+  afterEach(async () => {
+    await db.collection('absences').remove({});
+  });
+
   it('should retrieve absences', (done) => {
     db.collection('absences').save({
       _id: {
@@ -35,7 +39,10 @@ describe('absence response', () => {
       }
     }, (err, result) => {
       absenceResponse((text) => {
-        expect(text).toEqual("*Absent on 2018/11/14:*\n- *jakub.zmuda* #vacation _note: I am on vacation!_");
+        expect(text).toContain("Absent on 2018/11/14");
+        expect(text).toContain("jakub.zmuda");
+        expect(text).toContain("#vacation");
+        expect(text).toContain("I am on vacation!");
         done();
       }, '2018/11/14')
     });

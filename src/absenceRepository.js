@@ -1,6 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
 
-
 const save = (absence, callback) => {
   MongoClient.connect(process.env.DB_URI + process.env.DB_NAME, async (err, client) => {
     const db = client.db(process.env.DB_NAME);
@@ -22,7 +21,7 @@ const loadByDate = (date, callback) => {
   });
 };
 
-module.export = {
+module.exports = {
   save,
   loadByUser,
   loadByDate
