@@ -9,7 +9,7 @@ describe('registering absences', () => {
   beforeEach(async () => {
     const client = await MongoClient.connect(process.env.DB_URI + process.env.DB_NAME);
     db = client.db(process.env.DB_NAME);
-    await db.collection('absences').remove({});
+    await db.collection(process.env.COLLECTION_NAME).remove({});
   });
 
   it('should register vacation', (done) => {
@@ -19,7 +19,7 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        db.collection('absences').findOne((err, result) => {
+        db.collection(process.env.COLLECTION_NAME).findOne((err, result) => {
 
           expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
           expect(result.employeeID._id).toEqual('jakub.zmuda');
@@ -40,7 +40,7 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        db.collection('absences').findOne((err, result) => {
+        db.collection(process.env.COLLECTION_NAME).findOne((err, result) => {
 
           expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
           expect(result.employeeID._id).toEqual('jakub.zmuda');
@@ -61,7 +61,7 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        db.collection('absences').findOne((err, result) => {
+        db.collection(process.env.COLLECTION_NAME).findOne((err, result) => {
 
           expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
           expect(result.employeeID._id).toEqual('jakub.zmuda');
@@ -82,7 +82,7 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        db.collection('absences').findOne((err, result) => {
+        db.collection(process.env.COLLECTION_NAME).findOne((err, result) => {
 
           expect(result._id._id).toMatch(/^WL\.[a-zA-Z0-9]*$/);
           expect(result.employeeID._id).toEqual('jakub.zmuda');
@@ -103,7 +103,7 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        db.collection('absences').findOne((err, result) => {
+        db.collection(process.env.COLLECTION_NAME).findOne((err, result) => {
           expect(result).toBeNull();
           expect(res.data.text).toEqual('Tag is not supported. Check /absence for help.');
           done();
@@ -118,7 +118,7 @@ describe('registering absences', () => {
       user_name: 'kubaue'
     })
       .then(res => {
-        db.collection('absences').findOne((err, result) => {
+        db.collection(process.env.COLLECTION_NAME).findOne((err, result) => {
           expect(result).toBeNull();
           expect(res.data.text).toEqual('Multi tags are not supported. Check /absence for help.');
           done();

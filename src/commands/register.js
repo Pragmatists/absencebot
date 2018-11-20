@@ -1,10 +1,10 @@
 const parseIntentForSign = require('../parser').parseIntentForSign;
 const parseDateIntent = require('../parser').parseDateIntent;
-const MongoClient = require('mongodb').MongoClient;
 const uuid = require('uuid');
 const _ = require('lodash');
 const axios = require('axios');
 const AbsenceRepository = require('../absenceRepository');
+const tag = require('../tag');
 
 const registerCommand = (req, res, intent) => {
   const tagIntent = parseIntentForSign('#', intent);
@@ -72,21 +72,6 @@ const registerCommand = (req, res, intent) => {
       });
   }
 
-};
-
-const tag = {
-  remote: {
-    workload: 0
-  },
-  sick: {
-    workload: 480
-  },
-  vacation: {
-    workload: 480
-  },
-  holiday: {
-    workload: 480
-  },
 };
 
 const respondWithText = (res, text) => {

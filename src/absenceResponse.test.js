@@ -8,15 +8,15 @@ describe('absence response', () => {
   beforeEach(async () => {
     const client = await MongoClient.connect(process.env.DB_URI + process.env.DB_NAME);
     db = client.db(process.env.DB_NAME);
-    await db.collection('absences').remove({});
+    await db.collection(process.env.COLLECTION_NAME).remove({});
   });
 
   afterEach(async () => {
-    await db.collection('absences').remove({});
+    await db.collection(process.env.COLLECTION_NAME).remove({});
   });
 
   it('should retrieve absences', (done) => {
-    db.collection('absences').save({
+    db.collection(process.env.COLLECTION_NAME).save({
       _id: {
         _id: 'WL.7a40939d464a4dfaa70b70b10b1546a9'
       },
