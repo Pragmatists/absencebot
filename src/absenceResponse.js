@@ -13,12 +13,27 @@ const absenceResponse = (callback, date = moment().format(time.dateFormat)) => {
     }
       const entriesText = result
         .filter(filterBySupportedTags)
+        .sort((prev, next) => {
+          const prevName = surname(prev);
+          const nextName = surname(next);
+          return prevName < nextName ? -1 : 1;
+        })
         .reduce((acc, entry) => {
-        return acc + `- *${entry.employeeID._id}* #${_.join(entry.projectNames.map(tag => tag.name))} ${note(_.get(entry, 'note.text', undefined))}\n`
+        return acc + `- *${entry.employeeID._id}* #${tags(entry)} ${note(_.get(entry, 'note.text', undefined))}\n`
       }, '');
 
       callback(`*Absent on ${date}:*\n${entriesText}`);
     });
+};
+
+const tags = entry => _.join(entry.projectNames.map(tag => tag.name).filter(projectName => tag[projectName]));
+
+const surname = (entry) => {
+  const employeeName = entry.employeeID._id;
+  const indexOfSign = _.indexOf(employeeName, '.');
+  const start = indexOfSign + 1;
+
+  return employeeName.substring(start);
 };
 
 const filterBySupportedTags = (entry) => {

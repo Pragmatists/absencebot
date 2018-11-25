@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "bundle": "zip -r absencebot.zip *",
+    "bundle": "zip -r absencebot.zip * -x node_modules",
     "pre-test": "NODE_ENV=test yarn start",
     "test": "concurrently \"yarn pre-test\" \"wait-on http://localhost:8081 && ./node_modules/.bin/jest\""
   },
