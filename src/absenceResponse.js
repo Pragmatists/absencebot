@@ -1,10 +1,10 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 const time = require('./time');
 const _ = require('lodash');
 const AbsenceRepository = require('./absenceRepository');
 const tag = require('./tag');
 
-const absenceResponse = (callback, date = moment().format(time.dateFormat)) => {
+const absenceResponse = (callback, date = moment().tz('Europe/Warsaw').format(time.dateFormat)) => {
 
   AbsenceRepository.loadByDate(date,
     (err, result) => {
