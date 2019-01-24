@@ -11,6 +11,9 @@ const tag = {
   holiday: {
     workload: 480
   },
+  conference: {
+    workload: 480
+  }
 };
 
 module.exports = tag;
