@@ -4,7 +4,7 @@ const absenceResponse = require('./absenceResponse');
 
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [1, 2, 3, 4, 5];
-rule.hour = 7;
+rule.hour = 6;
 rule.minute = 0;
 
 postAbsencesMessage = () => {
