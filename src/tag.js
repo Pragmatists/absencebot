@@ -8,6 +8,9 @@ const tag = {
   vacation: {
     workload: 480
   },
+  ['vacation-special']: {
+    workload: 480
+  },
   holiday: {
     workload: 480
   },
