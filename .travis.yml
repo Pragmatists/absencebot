@@ -8,8 +8,8 @@ before_deploy:
 - ./scripts/predeploy.sh
 deploy:
   provider: elasticbeanstalk
-  access_key_id: AKIAQW54FQ26SBYHX24N
-  secret_access_key: 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
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
   skip_cleanup: true
   zip_file: absencebot.zip
   region: eu-central-1
