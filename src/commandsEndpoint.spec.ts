@@ -3,10 +3,13 @@ import * as nock from 'nock';
 import app from './api';
 import { OpenTrappAPI } from './openTrapp/OpenTrappAPI';
 import { AbsenceDTO } from './openTrapp/openTrappModel';
-import { SlackAPI } from './slack/SlackAPI';
 import * as moment from 'moment';
+import { mockRegisterAbsence, mockSlackUserInfo, mockTokenEndpoint } from './testUtils';
 
 describe('Commands endpoint test', () => {
+  const userId = '123';
+  const userEmail = 'john.doe@pragmatists.pl';
+
   it('returns help for empty command', done => {
     request(app)
         .post('/absence')
@@ -41,7 +44,7 @@ describe('Commands endpoint test', () => {
   });
 
   it('returns my absences for next days', done => {
-    const slackScope = mockSlackUserInfo();
+    const slackScope = mockSlackUserInfo(userId, userEmail);
     const tokenScope = mockTokenEndpoint();
     const scope = mockMyAbsences();
 
@@ -62,9 +65,9 @@ describe('Commands endpoint test', () => {
   });
 
   it( 'registers absence', done => {
-    const slackScope = mockSlackUserInfo();
+    const slackScope = mockSlackUserInfo(userId, userEmail);
     const tokenScope = mockTokenEndpoint();
-    const scope = mockRegisterAbsence();
+    const scope = mockRegisterAbsence({workload: 0, projectNames: ['remote'], day: '2019/06/30', note: 'working from home'});
 
     request(app)
         .post('/absence')
@@ -128,39 +131,5 @@ describe('Commands endpoint test', () => {
           user: 'john.doe'
         })
         .reply(200, workLogResponse);
-  }
-
-  function mockRegisterAbsence() {
-    return nock(OpenTrappAPI.API_ROOT_URL)
-        .post(
-            '/admin/work-log/john.doe/entries',
-            {workload: 0, projectNames: ['remote'], day: '2019/06/30', note: 'working from home'}
-        )
-        .matchHeader('Authorization', 'Bearer test-token')
-        .reply(200, {id: 'entry-id'});
-  }
-
-  function mockTokenEndpoint() {
-    return nock(OpenTrappAPI.API_ROOT_URL)
-        .post('/authentication/service-token', {clientID: 'test-client', secret: 'test-secret'})
-        .reply(200, {token: 'test-token'});
-  }
-
-  function mockSlackUserInfo() {
-    return nock(SlackAPI.API_ROOT_URL)
-        .get('/users.info')
-        .matchHeader('Authorization', 'Bearer slack-token')
-        .query({
-          user: '123'
-        })
-        .reply(200, {
-          data: {
-            user: {
-              profile: {
-                email: 'john.doe@pragmatists.pl'
-              }
-            }
-          }
-        });
   }
 });
