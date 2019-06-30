@@ -102,8 +102,8 @@ describe('Commands endpoint test', () => {
 
   function mockStatusForDate() {
     const workLogResponse: AbsenceDTO[] = [
-      {id: '1', workload: 0, employeeID: 'john.doe', projectNames: ['remote'], day: '2019/06/29', note: 'Some note'},
-      {id: '2', workload: 480, employeeID: 'tom.hanks', projectNames: ['vacation'], day: '2019/06/29'}
+      {id: '1', workload: 480, employeeID: 'tom.hanks', projectNames: ['vacation'], day: '2019/06/29'},
+      {id: '2', workload: 0, employeeID: 'john.doe', projectNames: ['remote', 'nvm'], day: '2019/06/29', note: 'Some note'}
     ];
 
     return nock(OpenTrappAPI.API_ROOT_URL)
@@ -118,7 +118,7 @@ describe('Commands endpoint test', () => {
 
   function mockMyAbsences() {
     const workLogResponse: AbsenceDTO[] = [
-      {id: '1', workload: 0, employeeID: 'john.doe', projectNames: ['remote'], day: '2019/06/29', note: 'Some note'},
+      {id: '1', workload: 0, employeeID: 'john.doe', projectNames: ['remote', 'nvm'], day: '2019/06/29', note: 'Some note'},
       {id: '2', workload: 480, employeeID: 'john.doe', projectNames: ['vacation'], day: '2019/06/30'}
     ];
 
