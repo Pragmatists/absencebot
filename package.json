@@ -6,7 +6,6 @@
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/app",
     "webpack": "webpack --config webpack.config.js",
-    "bundle": "git archive -v -o absencebot.zip --format=zip HEAD",
     "test": "jest"
   },
   "author": "Jakub Żmuda and Hubert Legęć",
