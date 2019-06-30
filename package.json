@@ -6,7 +6,8 @@
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/app",
     "webpack": "webpack --config webpack.config.js",
-    "test": "jest"
+    "test": "jest --coverage",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "author": "Jakub Żmuda and Hubert Legęć",
   "license": "ISC",
@@ -28,6 +29,7 @@
     "@types/nock": "^10.0.3",
     "@types/node": "^10.14.10",
     "@types/node-schedule": "^1.2.3",
+    "coveralls": "^3.0.4",
     "jest": "^24.8.0",
     "nock": "^10.0.6",
     "supertest": "^4.0.2",
@@ -47,6 +49,12 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "testEnvironment": "node",
-    "setupFiles": ["<rootDir>/../setupTests.ts"]
+    "coverageDirectory": "../coverage",
+    "setupFiles": [
+      "<rootDir>/../setupTests.ts"
+    ]
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
