@@ -1,13 +1,13 @@
-const schedule = require('node-schedule');
-const axios = require('axios');
-const absenceResponse = require('./absenceResponse');
+import * as schedule from 'node-schedule';
+import axios from 'axios';
+import { absenceResponse } from './absenceResponse';
 
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [1, 2, 3, 4, 5];
 rule.hour = 6;
 rule.minute = 0;
 
-postAbsencesMessage = () => {
+const postAbsencesMessage = () => {
   console.log(new Date(), 'posting daily message');
   absenceResponse((text) => {
     axios.post(process.env.SLACK_HOOK, {

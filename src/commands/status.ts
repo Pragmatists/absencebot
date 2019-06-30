@@ -1,20 +1,17 @@
-const parseIntentForSign = require('../parser').parseIntentForSign;
-const parseDateIntent = require('../parser').parseDateIntent;
-const absenceResponse = require('../absenceResponse');
+import { parseDateIntent, parseIntentForSign } from '../parser';
+import { absenceResponse } from '../absenceResponse';
 
-const statusCommand = (res, intent) => {
+export const statusCommand = (res, intent) => {
   if (intent.includes('@')) {
     const dateIntent = parseIntentForSign('@', intent);
     const date = parseDateIntent(dateIntent);
 
     if (!date) {
-      respondWithText("Sorry I did not understand the date format");
-    }
-    else {
+      respondWithText(res, "Sorry I did not understand the date format");
+    } else {
       absenceResponse((text) => respondWithText(res, text), date);
     }
-  }
-  else {
+  } else {
     absenceResponse((text) => respondWithText(res, text));
   }
 };
@@ -26,5 +23,3 @@ const respondWithText = (res, text) => {
     mrkdwn: true
   });
 };
-
-module.exports = statusCommand;
