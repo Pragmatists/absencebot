@@ -94,7 +94,7 @@ describe('RegisterCommand', () => {
 
     command.handle(intent, userId)
         .subscribe(response => {
-          expect(response).toEqual(expectedResponse('I did not understand the date format. Check `/absence` for help'));
+          expect(response).toEqual(expectedResponse('I did not understand the date format. Check `/absence` for help.'));
           done();
         });
   });
@@ -104,7 +104,7 @@ describe('RegisterCommand', () => {
 
     command.handle(intent, userId)
         .subscribe(response => {
-          expect(response).toEqual(expectedResponse('Tag required. Check `/absence` for help'));
+          expect(response).toEqual(expectedResponse('Tag required. Check `/absence` for help.'));
           done();
         });
   });

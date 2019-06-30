@@ -9,7 +9,7 @@ export class StatusCommand extends Command {
       const dateIntent = parseIntentForSign('@', intent);
       const date = parseDateIntent(dateIntent);
       if (!date) {
-        return of('Sorry I did not understand the date format');
+        return of('I did not understand the date format. Check `/absence` for help.');
       } else {
         return absenceResponse(date);
       }

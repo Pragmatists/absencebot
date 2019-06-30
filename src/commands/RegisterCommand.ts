@@ -1,10 +1,11 @@
+import { Observable, of } from 'rxjs';
+import { catchError, flatMap, map, mapTo } from 'rxjs/operators';
+import * as moment from 'moment';
 import { parseIntentForSign, parseDateIntent } from '../parser';
 import { SlackAPI } from '../slack/SlackAPI';
 import { OpenTrappAPI } from '../openTrapp/OpenTrappAPI';
 import { dateFormat } from '../time';
 import { Command } from './Command';
-import { Observable, of } from 'rxjs';
-import { catchError, flatMap, map, mapTo } from 'rxjs/operators';
 import { supportedTags } from '../tag';
 
 export class RegisterCommand extends Command {
@@ -23,9 +24,9 @@ export class RegisterCommand extends Command {
     const date = parseDateIntent(dateIntent);
     const note = parseIntentForSign('"', intent, '"');
     if (!date) {
-      return of('I did not understand the date format. Check `/absence` for help');
+      return of('I did not understand the date format. Check `/absence` for help.');
     } else if (!tagIntent) {
-      return of('Tag required. Check `/absence` for help');
+      return of('Tag required. Check `/absence` for help.');
     }
     if (intent.split("#").length - 1 > 1) {
       return of('Multi tags are not supported. Check /absence for help.');
@@ -36,7 +37,7 @@ export class RegisterCommand extends Command {
     }
   }
 
-  private register(userId: string, date, tagIntent, note) {
+  private register(userId: string, date: moment.Moment, tagIntent: string, note?: string) {
     return SlackAPI.instance.userEmail(userId).pipe(
         map(email => email.substring(0, email.indexOf('@'))),
         flatMap(username => OpenTrappAPI.instance.registerAbsence(username, {
