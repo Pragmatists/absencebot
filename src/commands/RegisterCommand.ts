@@ -9,15 +9,6 @@ import { Command } from './Command';
 import { supportedTags } from '../tag';
 
 export class RegisterCommand extends Command {
-  private static WORKLOAD_FOR_TAG = {
-    remote: 0,
-    sick: 480,
-    vacation: 480,
-    'vacation-special': 480,
-    holiday: 480,
-    conference: 480
-  };
-
   protected handleRequest(intent: string, userId: string): Observable<string> {
     const tagIntent = parseIntentForSign('#', intent);
     const dateIntent = parseIntentForSign('@', intent);
@@ -43,7 +34,7 @@ export class RegisterCommand extends Command {
         flatMap(username => OpenTrappAPI.instance.registerAbsence(username, {
           day: date.format(dateFormat),
           projectNames: [tagIntent],
-          workload: RegisterCommand.WORKLOAD_FOR_TAG[tagIntent],
+          workload: RegisterCommand.workloadForTag(tagIntent),
           note: note
         })),
         mapTo(tagIntent === 'sick' ? 'I got it. Feel better soon!' : 'Alright, noted.'),
@@ -52,5 +43,9 @@ export class RegisterCommand extends Command {
           return of('Unexpected error occurred!');
         })
     );
+  }
+
+  private static workloadForTag(tag: string): string {
+    return tag === 'remote' ? '0m' : '1d';
   }
 }

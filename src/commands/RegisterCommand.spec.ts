@@ -15,7 +15,7 @@ describe('RegisterCommand', () => {
 
   it('registers #vacation', (done) => {
     const intent = '#vacation @2019/06/25 "I am on vacation!"';
-    const scope = mockRegisterAbsence({workload: 480, projectNames: ['vacation'], day: '2019/06/25', note: 'I am on vacation!'});
+    const scope = mockRegisterAbsence({workload: '1d', projectNames: ['vacation'], day: '2019/06/25', note: 'I am on vacation!'});
 
     command.handle(intent, userId)
         .subscribe(response => {
@@ -29,7 +29,7 @@ describe('RegisterCommand', () => {
 
   it('registers #sick', done => {
     const intent = '#sick @2019/06/26 "I am sick today!"';
-    const scope = mockRegisterAbsence({workload: 480, projectNames: ['sick'], day: '2019/06/26', note: 'I am sick today!'});
+    const scope = mockRegisterAbsence({workload: '1d', projectNames: ['sick'], day: '2019/06/26', note: 'I am sick today!'});
 
     command.handle(intent, userId)
         .subscribe(response => {
@@ -43,7 +43,7 @@ describe('RegisterCommand', () => {
 
   it('registers #remote', done => {
     const intent = '#remote @2019/06/27 "I am working from home today!"';
-    const scope = mockRegisterAbsence({workload: 0, projectNames: ['remote'], day: '2019/06/27', note: 'I am working from home today!'});
+    const scope = mockRegisterAbsence({workload: '0m', projectNames: ['remote'], day: '2019/06/27', note: 'I am working from home today!'});
 
     command.handle(intent, userId)
         .subscribe(response => {
@@ -57,7 +57,7 @@ describe('RegisterCommand', () => {
 
   it('registers #holiday', done => {
     const intent = '#holiday @2019/06/28 "It is a holiday!"';
-    const scope = mockRegisterAbsence({workload: 480, projectNames: ['holiday'], day: '2019/06/28', note: 'It is a holiday!'});
+    const scope = mockRegisterAbsence({workload: '1d', projectNames: ['holiday'], day: '2019/06/28', note: 'It is a holiday!'});
 
     command.handle(intent, userId)
         .subscribe(response => {

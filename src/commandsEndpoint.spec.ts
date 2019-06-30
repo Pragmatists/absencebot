@@ -67,7 +67,7 @@ describe('Commands endpoint test', () => {
   it( 'registers absence', done => {
     const slackScope = mockSlackUserInfo(userId, userEmail);
     const tokenScope = mockTokenEndpoint();
-    const scope = mockRegisterAbsence({workload: 0, projectNames: ['remote'], day: '2019/06/30', note: 'working from home'});
+    const scope = mockRegisterAbsence({workload: '0m', projectNames: ['remote'], day: '2019/06/30', note: 'working from home'});
 
     request(app)
         .post('/absence')

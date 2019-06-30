@@ -9,7 +9,7 @@ export interface AbsenceDTO {
 
 export interface RegisterAbsenceDTO {
   day: string;
-  workload: number;
+  workload: string;
   projectNames: string[];
   note?: string;
 }
