@@ -3,11 +3,12 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 interface UserInfoDTO {
-  data: {
-    user: {
-      profile: {
-        email: string;
-      }
+  user: {
+    id: string;
+    profile: {
+      email: string;
+      first_name: string;
+      last_name: string;
     }
   }
 }
@@ -36,7 +37,7 @@ export class SlackAPI {
 
   userEmail(userId: string): Observable<string> {
     return this.userInfo(userId).pipe(
-        map(userInfo => userInfo.data.user.profile.email)
+        map(userInfo => userInfo.user.profile.email)
     );
   }
 

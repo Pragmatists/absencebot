@@ -10,11 +10,10 @@ export function mockSlackUserInfo(userId: string, email: string) {
         user: userId
       })
       .reply(200, {
-        data: {
-          user: {
-            profile: {
-              email: email
-            }
+        user: {
+          id: userId,
+          profile: {
+            email: email
           }
         }
       });
