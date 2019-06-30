@@ -1,9 +1,9 @@
 import * as request from 'supertest';
 import * as nock from 'nock';
 import app from './api';
-import { OPEN_TRAPP_API_URL } from './openTrapp/OpenTrappAPI';
-import { WorkLogDTO } from './openTrapp/openTrappModel';
-import { SLACK_API_URL } from './slack/SlackAPI';
+import { OpenTrappAPI } from './openTrapp/OpenTrappAPI';
+import { AbsenceDTO } from './openTrapp/openTrappModel';
+import { SlackAPI } from './slack/SlackAPI';
 import * as moment from 'moment';
 
 describe('Commands endpoint test', () => {
@@ -61,7 +61,7 @@ describe('Commands endpoint test', () => {
         });
   });
 
-  it('registers absence', done => {
+  it( 'registers absence', done => {
     const slackScope = mockSlackUserInfo();
     const tokenScope = mockTokenEndpoint();
     const scope = mockRegisterAbsence();
@@ -98,12 +98,12 @@ describe('Commands endpoint test', () => {
   });
 
   function mockStatusForDate() {
-    const workLogResponse: WorkLogDTO[] = [
+    const workLogResponse: AbsenceDTO[] = [
       {id: '1', workload: 0, employeeID: 'john.doe', projectNames: ['remote'], day: '2019/06/29', note: 'Some note'},
       {id: '2', workload: 480, employeeID: 'tom.hanks', projectNames: ['vacation'], day: '2019/06/29'}
     ];
 
-    return nock(OPEN_TRAPP_API_URL)
+    return nock(OpenTrappAPI.API_ROOT_URL)
         .get('/admin/work-log/entries')
         .matchHeader('Authorization', 'Bearer test-token')
         .query({
@@ -114,12 +114,12 @@ describe('Commands endpoint test', () => {
   }
 
   function mockMyAbsences() {
-    const workLogResponse: WorkLogDTO[] = [
+    const workLogResponse: AbsenceDTO[] = [
       {id: '1', workload: 0, employeeID: 'john.doe', projectNames: ['remote'], day: '2019/06/29', note: 'Some note'},
       {id: '2', workload: 480, employeeID: 'john.doe', projectNames: ['vacation'], day: '2019/06/30'}
     ];
 
-    return nock(OPEN_TRAPP_API_URL)
+    return nock(OpenTrappAPI.API_ROOT_URL)
         .get('/admin/work-log/entries')
         .matchHeader('Authorization', 'Bearer test-token')
         .query({
@@ -131,7 +131,7 @@ describe('Commands endpoint test', () => {
   }
 
   function mockRegisterAbsence() {
-    return nock(OPEN_TRAPP_API_URL)
+    return nock(OpenTrappAPI.API_ROOT_URL)
         .post(
             '/admin/work-log/john.doe/entries',
             {workload: 0, projectNames: ['remote'], day: '2019/06/30', note: 'working from home'}
@@ -141,13 +141,13 @@ describe('Commands endpoint test', () => {
   }
 
   function mockTokenEndpoint() {
-    return nock(OPEN_TRAPP_API_URL)
+    return nock(OpenTrappAPI.API_ROOT_URL)
         .post('/authentication/service-token', {clientID: 'test-client', secret: 'test-secret'})
         .reply(200, {token: 'test-token'});
   }
 
   function mockSlackUserInfo() {
-    return nock(SLACK_API_URL)
+    return nock(SlackAPI.API_ROOT_URL)
         .get('/users.info')
         .matchHeader('Authorization', 'Bearer slack-token')
         .query({

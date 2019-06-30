@@ -1,6 +1,8 @@
 import * as schedule from 'node-schedule';
-import axios from 'axios';
 import { absenceResponse } from './absenceResponse';
+import { catchError, flatMap, tap } from 'rxjs/operators';
+import { SlackAPI } from './slack/SlackAPI';
+import { of } from 'rxjs';
 
 const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [1, 2, 3, 4, 5];
@@ -9,14 +11,14 @@ rule.minute = 0;
 
 const postAbsencesMessage = () => {
   console.log(new Date(), 'posting daily message');
-  absenceResponse((text) => {
-    axios.post(process.env.SLACK_HOOK, {
-      text: text,
-      mrkdwn: true
-    })
-        .then((res) => console.log(new Date(), 'posted daily message, res: ', res.data))
-        .catch((res) => console.log(new Date(), 'failed to post daily message, res: ', res.data))
-  });
+  absenceResponse().pipe(
+      flatMap(message => SlackAPI.instance.post(message)),
+      tap(response => console.log(new Date(), 'posted daily message, res: ', response)),
+      catchError(e => {
+        console.error(new Date(), 'failed to post daily message, res: ', e);
+        return of(undefined);
+      })
+  ).subscribe();
 };
 
 console.log(new Date(), 'scheduled post daily message');

@@ -1,15 +1,11 @@
 import { dateFormat } from '../time';
+import { Command } from './Command';
+import { Observable, of } from 'rxjs';
 
-export const helpCommand = (res, intent) => {
-  res.status(200).json({
-    text: helpMessage(),
-    response_type: 'ephemeral',
-    mrkdwn: true
-  });
-};
-
-const helpMessage = () => {
-  return `*Absence bot help:*\n
+export class HelpCommand extends Command {
+  protected handleRequest(intent: string, userId: string): Observable<string> {
+    return of(
+        `*Absence bot help:*\n
   *Absence bot is integrated with Open Trapp. Registering absence here will fill the Open Trapp and vice versa.* \n
   *Want to check who's out today?* \`/absence status\`\n
   *Want to check out who's out on given day?* \`/absence status ${dateFormat}\` or \`/absence status @tomorrow\`\n
@@ -20,5 +16,7 @@ const helpMessage = () => {
   *You can attach a note wrapping it in double quotes.*
   *Example1*: \`/absence #vacation @tomorrow\`
   *Example2*: \`/absence #sick @today\`
-  *Example3*: \`/absence #vacation @2018/11/02 "I'll be there after lunch."\``;
-};
+  *Example3*: \`/absence #vacation @2018/11/02 "I'll be there after lunch."\``
+    );
+  }
+}

@@ -1,4 +1,4 @@
-export interface WorkLogDTO {
+export interface AbsenceDTO {
   id: string;
   employeeID: string;
   day: string;
