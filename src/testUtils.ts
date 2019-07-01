@@ -19,6 +19,16 @@ export function mockSlackUserInfo(userId: string, email: string) {
       });
 }
 
+export function mockSlackFailure(userId: string) {
+  return nock(SlackAPI.API_ROOT_URL)
+      .get('/users.info')
+      .matchHeader('Authorization', 'Bearer slack-token')
+      .query({
+        user: userId
+      })
+      .reply(500, {message: "Internal server error"});
+}
+
 export function mockTokenEndpoint() {
   return nock(OpenTrappAPI.API_ROOT_URL)
       .post('/authentication/service-token', {clientID: 'test-client', secret: 'test-secret'})

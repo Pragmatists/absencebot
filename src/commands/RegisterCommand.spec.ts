@@ -1,20 +1,19 @@
 import { RegisterCommand } from './RegisterCommand';
-import { mockRegisterAbsence, mockSlackUserInfo, mockTokenEndpoint } from '../testUtils';
+import { mockRegisterAbsence, mockSlackFailure, mockSlackUserInfo, mockTokenEndpoint } from '../testUtils';
 
 describe('RegisterCommand', () => {
   const userId = '123';
   const userEmail = 'john.doe@pragmatists.pl';
   const command = new RegisterCommand();
-  let slackScope;
   let tokenScope;
 
   beforeEach(() => {
-    slackScope = mockSlackUserInfo(userId, userEmail);
     tokenScope = mockTokenEndpoint();
   });
 
   it('registers #vacation', (done) => {
     const intent = '#vacation @2019/06/25 "I am on vacation!"';
+    const slackScope = mockSlackUserInfo(userId, userEmail);
     const scope = mockRegisterAbsence({workload: '1d', projectNames: ['vacation'], day: '2019/06/25', note: 'I am on vacation!'});
 
     command.handle(intent, userId)
@@ -29,6 +28,7 @@ describe('RegisterCommand', () => {
 
   it('registers #sick', done => {
     const intent = '#sick @2019/06/26 "I am sick today!"';
+    const slackScope = mockSlackUserInfo(userId, userEmail);
     const scope = mockRegisterAbsence({workload: '1d', projectNames: ['sick'], day: '2019/06/26', note: 'I am sick today!'});
 
     command.handle(intent, userId)
@@ -43,6 +43,7 @@ describe('RegisterCommand', () => {
 
   it('registers #remote', done => {
     const intent = '#remote @2019/06/27 "I am working from home today!"';
+    const slackScope = mockSlackUserInfo(userId, userEmail);
     const scope = mockRegisterAbsence({workload: '0m', projectNames: ['remote'], day: '2019/06/27', note: 'I am working from home today!'});
 
     command.handle(intent, userId)
@@ -57,6 +58,7 @@ describe('RegisterCommand', () => {
 
   it('registers #holiday', done => {
     const intent = '#holiday @2019/06/28 "It is a holiday!"';
+    const slackScope = mockSlackUserInfo(userId, userEmail);
     const scope = mockRegisterAbsence({workload: '1d', projectNames: ['holiday'], day: '2019/06/28', note: 'It is a holiday!'});
 
     command.handle(intent, userId)
@@ -105,6 +107,18 @@ describe('RegisterCommand', () => {
     command.handle(intent, userId)
         .subscribe(response => {
           expect(response).toEqual(expectedResponse('Tag required. Check `/absence` for help.'));
+          done();
+        });
+  });
+
+  it('returns unexpected error on slack API failure', done => {
+    const intent = '#vacation @2019/06/25 "I am on vacation!"';
+    const slackScope = mockSlackFailure(userId);
+
+    command.handle(intent, userId)
+        .subscribe(response => {
+          expect(slackScope.isDone()).toBeTruthy();
+          expect(response).toEqual(expectedResponse('Unexpected error occurred!'));
           done();
         });
   });
