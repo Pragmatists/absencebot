@@ -32,7 +32,7 @@ describe('Commands endpoint test', () => {
         .post('/absence')
         .send({text: 'status @2019/06/29'})
         .expect(200, {
-          text: '*Absent on 2019/06/29:*\n- *john.doe* #remote _note: Some note_\n- *tom.hanks* #vacation ',
+          text: '*Absent on 2019/06/29:*\n- *john.doe* #remote _note: Some note_\n- *tom.hanks* #vacation',
           response_type: 'ephemeral',
           mrkdwn: true
         })

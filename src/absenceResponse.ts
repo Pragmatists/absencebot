@@ -18,7 +18,7 @@ class AbsenceRow {
   }
 
   toString(): string {
-    return `- *${this.employeeId}* ${this.matchingTags} ${this.formattedNote}`
+    return `- *${this.employeeId}* ${this.matchingTags}${this.formattedNote}`
   }
 
   get employeeSurname(): string {
@@ -33,7 +33,7 @@ class AbsenceRow {
   }
 
   private get formattedNote() {
-    return (!this.note || !this.note.length) ? '' : `_note: ${this.note}_`;
+    return (!this.note || !this.note.length) ? '' : ` _note: ${this.note}_`;
   };
 }
 

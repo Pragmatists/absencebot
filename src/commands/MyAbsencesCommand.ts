@@ -39,9 +39,9 @@ class AbsenceRow {
 export class MyAbsencesCommand extends Command {
   protected handleRequest(intent: string, userId: string): Observable<string> {
     return SlackAPI.instance.userEmail(userId).pipe(
-        map(email => email.substring(0, email.indexOf('@'))),
+        map(this.emailToUsername),
         flatMap(username => OpenTrappAPI.instance.findAbsencesAfterDate(moment(), supportedTags, username)),
-        map(this.workLogsToAbsenceList),
+        map(this.absencesToList),
         map(entriesText => `*Your absences:*\n${entriesText}`),
         catchError(e => {
           console.log(e);
@@ -50,7 +50,11 @@ export class MyAbsencesCommand extends Command {
     );
   }
 
-  private workLogsToAbsenceList(absences: AbsenceDTO[]) {
+  private emailToUsername(email: string): string {
+    return email.substring(0, email.indexOf('@'));
+  }
+
+  private absencesToList(absences: AbsenceDTO[]): string {
     return chain(absences)
         .map(a => new AbsenceRow(a))
         .map(a => a.toString())
