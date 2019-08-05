@@ -7,7 +7,7 @@ import * as moment from 'moment-timezone';
 
 const rule = new RecurrenceRule();
 rule.dayOfWeek = [0, 1, 2, 3, 4];
-rule.hour = 17;
+rule.hour = 13;
 rule.minute = 0;
 
 const postAbsencesMessage = () => {
