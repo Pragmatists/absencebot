@@ -1,10 +1,10 @@
 import * as moment from 'moment-timezone';
-import { join, indexOf, chain } from 'lodash';
-import { supportedTags } from './tag';
-import { OpenTrappAPI } from './openTrapp/OpenTrappAPI';
-import { AbsenceDTO } from './openTrapp/openTrappModel';
-import { dateFormat } from './time';
-import { map } from 'rxjs/operators';
+import {chain} from 'lodash';
+import {supportedTags} from './tag';
+import {OpenTrappAPI} from './openTrapp/OpenTrappAPI';
+import {AbsenceDTO} from './openTrapp/openTrappModel';
+import {dateFormat} from './time';
+import {map} from 'rxjs/operators';
 
 class AbsenceRow {
   private readonly employeeId: string;
@@ -21,8 +21,8 @@ class AbsenceRow {
     return `- *${this.employeeId}* ${this.matchingTags}${this.formattedNote}`
   }
 
-  get employeeSurname(): string {
-    return this.employeeId.substr(indexOf(this.employeeId, '.') + 1)
+  get employeeName(): string {
+    return this.employeeId
   }
 
   private get matchingTags(): string {
@@ -40,7 +40,7 @@ class AbsenceRow {
 const workLogsToAbsenceList = (absences: AbsenceDTO[]) => {
   return chain(absences)
       .map(a => new AbsenceRow(a))
-      .sortBy(a => a.employeeSurname)
+      .sortBy(a => a.employeeName)
       .map(a => a.toString())
       .join('\n');
 };
